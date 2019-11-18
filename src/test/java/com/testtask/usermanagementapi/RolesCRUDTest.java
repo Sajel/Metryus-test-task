@@ -13,8 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 public class RolesCRUDTest extends UserManagementApiApplicationTests {
     @Autowired
@@ -45,7 +44,7 @@ public class RolesCRUDTest extends UserManagementApiApplicationTests {
         String initialRoleName = "New role";
         Role newRole = new Role().setName(initialRoleName);
 
-        Role createdRole = createRole(initialRoleName, newRole);
+        Role createdRole = createRole(newRole);
         Long id = createdRole.getId();
 
         checkRoleName(initialRoleName, id);
@@ -62,9 +61,9 @@ public class RolesCRUDTest extends UserManagementApiApplicationTests {
 
     private void deleteRole(Long id, String updatedRoleName) {
         HttpEntity<Role> deleteRequest = new HttpEntity<>(new Role().setName(updatedRoleName));
-        ResponseEntity<Void> updatingResponse = restTemplate.exchange("/api/roles/" + id, DELETE, deleteRequest, Void.class);
-        assertThat(updatingResponse.getStatusCode())
-                .isEqualTo(OK);
+        ResponseEntity<Void> deleteResponse = restTemplate.exchange("/api/roles/" + id, DELETE, deleteRequest, Void.class);
+        assertThat(deleteResponse.getStatusCode())
+                .isEqualTo(NO_CONTENT);
     }
 
     private void updateRole(Long id, String updatedRoleName) {
@@ -92,14 +91,14 @@ public class RolesCRUDTest extends UserManagementApiApplicationTests {
                 .isEqualTo(id);
     }
 
-    private Role createRole(String newRoleName, Role newRole) {
+    private Role createRole(Role newRole) {
         ResponseEntity<Role> creatingResponse = restTemplate.postForEntity("/api/roles", newRole, Role.class);
         assertThat(creatingResponse.getStatusCode())
-                .isEqualTo(OK);
+                .isEqualTo(CREATED);
         assertThat(creatingResponse.getBody())
                 .isNotNull();
         assertThat(creatingResponse.getBody().getName())
-                .isEqualTo(newRoleName);
+                .isEqualTo(newRole.getName());
 
         Long id = creatingResponse.getBody().getId();
         assertThat(id)

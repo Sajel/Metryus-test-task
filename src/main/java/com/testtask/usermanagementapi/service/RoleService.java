@@ -1,7 +1,7 @@
 package com.testtask.usermanagementapi.service;
 
 import com.testtask.usermanagementapi.model.Role;
-import com.testtask.usermanagementapi.repository.RolesRepository;
+import com.testtask.usermanagementapi.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,29 +11,29 @@ import java.util.Optional;
 @Service
 public class RoleService {
 
-    private final RolesRepository rolesRepository;
+    private final RoleRepository roleRepository;
 
-    public RoleService(RolesRepository rolesRepository) {
-        this.rolesRepository = rolesRepository;
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     public Collection<Role> getAllRoles() {
-        return rolesRepository.findAll();
+        return roleRepository.findAll();
     }
 
     public Optional<Role> getRoleById(Long id) {
-        return rolesRepository.findById(id);
+        return roleRepository.findById(id);
     }
 
     @Transactional
     public Role createRole(Role role) {
-        return rolesRepository.save(role);
+        return roleRepository.save(role);
     }
 
     @Transactional
     public boolean updateRole(Role role) {
-        if (rolesRepository.existsById(role.getId())) {
-            rolesRepository.save(role);
+        if (roleRepository.existsById(role.getId())) {
+            roleRepository.save(role);
             return true;
         } else {
             return false;
@@ -42,6 +42,10 @@ public class RoleService {
 
     @Transactional
     public void deleteRole(Long id) {
-        rolesRepository.deleteById(id);
+        roleRepository.deleteById(id);
+    }
+
+    public Collection<Role> getRolesByNames(Collection<String> roleNames) {
+        return roleRepository.findAllByNameIn(roleNames);
     }
 }

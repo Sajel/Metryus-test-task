@@ -2,6 +2,7 @@ package com.testtask.usermanagementapi.controller;
 
 import com.testtask.usermanagementapi.model.Role;
 import com.testtask.usermanagementapi.service.RoleService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,8 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
-        return ResponseEntity.ok(roleService.createRole(role));
+    public ResponseEntity<Role> createRole(@RequestBody Role role) {
+        return new ResponseEntity<>(roleService.createRole(role), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -45,7 +46,7 @@ public class RoleController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRole(@PathVariable long id) {
         roleService.deleteRole(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
