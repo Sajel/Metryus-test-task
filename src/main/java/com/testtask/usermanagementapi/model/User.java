@@ -9,6 +9,8 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @SequenceGenerator(name = "users_generator", sequenceName = "users_seq", allocationSize = 1)
     private Long id;
     @Column(name = "login", unique = true, nullable = false, length = 50)
     private String login;

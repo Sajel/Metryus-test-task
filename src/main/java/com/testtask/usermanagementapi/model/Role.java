@@ -1,15 +1,14 @@
 package com.testtask.usermanagementapi.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
 public class Role {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_generator")
+    @SequenceGenerator(name = "roles_generator", sequenceName = "roles_seq", allocationSize = 1)
     private Long id;
     @Column(name = "name")
     private String name;
