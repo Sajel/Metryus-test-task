@@ -1,6 +1,10 @@
 package com.testtask.usermanagementapi.model;
 
+import com.testtask.usermanagementapi.validator.UserPasswordSymbolsConstraint;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,8 +19,13 @@ public class User {
     @SequenceGenerator(name = "users_generator", sequenceName = "users_seq", allocationSize = 1)
     private Long id;
     @Column(name = "login", unique = true, nullable = false, length = 50)
+    @NotNull
+    @Size(min = 8, max = 50, message = "{user.login.notEmpty}")
     private String login;
     @Column(name = "password", nullable = false, length = 50)
+    @NotNull
+    @Size(min = 8, max = 50)
+    @UserPasswordSymbolsConstraint
     private String password;
     @Column(name = "first_name")
     private String firstName;

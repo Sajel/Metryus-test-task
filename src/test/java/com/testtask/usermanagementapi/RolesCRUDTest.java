@@ -31,9 +31,6 @@ public class RolesCRUDTest extends UserManagementApiApplicationTests {
 
         List<Role> roles = Arrays.asList(response.getBody());
         assertThat(roles)
-                .size()
-                .isEqualTo(2);
-        assertThat(roles)
                 .contains(new Role().setId(1L).setName("ADMIN"));
         assertThat(roles)
                 .contains(new Role().setId(2L).setName("CLIENT"));

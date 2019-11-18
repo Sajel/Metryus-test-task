@@ -1,6 +1,7 @@
 package com.testtask.usermanagementapi.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -10,7 +11,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_generator")
     @SequenceGenerator(name = "roles_generator", sequenceName = "roles_seq", allocationSize = 1)
     private Long id;
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
+    @NotNull
     private String name;
 
     public Long getId() {

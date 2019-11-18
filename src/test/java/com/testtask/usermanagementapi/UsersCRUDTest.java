@@ -23,7 +23,7 @@ public class UsersCRUDTest extends UserManagementApiApplicationTests {
 
     @Test
     void createUserAddRoleRemoveRole() {
-        User user = new User().setLogin("Login").setPassword("password");
+        User user = new User().setLogin("Login-length").setPassword("password2");
 
         ResponseEntity<User> creatingResponse = restTemplate.postForEntity("/api/users", user, User.class);
         assertThat(creatingResponse.getStatusCode())

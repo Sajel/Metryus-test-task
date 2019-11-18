@@ -1,4 +1,4 @@
-create table roles (id bigint not null, name varchar(255), primary key (id));
+create table roles (id bigint not null, name varchar(255) not null unique, primary key (id));
 create table users (id bigint not null,
                     first_name varchar(255),
                     last_name varchar(255),
