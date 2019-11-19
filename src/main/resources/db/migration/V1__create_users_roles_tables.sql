@@ -3,7 +3,7 @@ create table users (id bigint not null,
                     first_name varchar(255),
                     last_name varchar(255),
                     login varchar(50) not null unique,
-                    password varchar(50) not null,
+                    password varchar(255) not null,
                     primary key (id));
 create table user_roles (user_id bigint not null,
                          role_id bigint not null,

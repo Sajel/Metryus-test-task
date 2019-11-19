@@ -1,6 +1,10 @@
 package com.testtask.usermanagementapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.testtask.usermanagementapi.validator.RawPasswordValidation;
 import com.testtask.usermanagementapi.validator.UserPasswordSymbolsConstraint;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +16,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
@@ -24,14 +28,14 @@ public class User {
     private String login;
     @Column(name = "password", nullable = false, length = 50)
     @NotNull
-    @Size(min = 8, max = 50)
-    @UserPasswordSymbolsConstraint
+    @Size(min = 8, max = 50, groups = RawPasswordValidation.class)
+    @UserPasswordSymbolsConstraint(groups = RawPasswordValidation.class)
     private String password;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -55,8 +59,44 @@ public class User {
         return this;
     }
 
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
     }
 
     public User setPassword(String password) {

@@ -4,7 +4,9 @@ spring:
       enabled: true
   jpa:
     show-sql: true
-#    generate-ddl: true
-  data:
-    rest:
-      base-path: /api
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug

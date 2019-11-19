@@ -1,12 +1,15 @@
 package com.testtask.usermanagementapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_generator")
     @SequenceGenerator(name = "roles_generator", sequenceName = "roles_seq", allocationSize = 1)
@@ -44,5 +47,11 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    @JsonIgnore
+    public String getAuthority() {
+        return "ROLE_" + name;
     }
 }

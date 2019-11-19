@@ -3,11 +3,12 @@ package com.testtask.usermanagementapi.controller;
 import com.testtask.usermanagementapi.model.Role;
 import com.testtask.usermanagementapi.model.User;
 import com.testtask.usermanagementapi.service.UserService;
+import com.testtask.usermanagementapi.validator.RawPasswordValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<User>> getAllRoles() {
+    public ResponseEntity<Collection<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -31,12 +32,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> createUser(@Validated(RawPasswordValidation.class) @RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user, @PathVariable long id) {
+    public ResponseEntity<User> updateUser(@Validated(RawPasswordValidation.class) @RequestBody User user, @PathVariable long id) {
         user.setId(id);
         if (userService.updateUser(user)) {
             return ResponseEntity.ok(user);
